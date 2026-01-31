@@ -1,7 +1,7 @@
-package com.demontoast.tests;
+package com.ryanh.tests;
 
-import com.demontoast.base.BaseTest;
-import com.demontoast.pages.HomePage;
+import com.ryanh.base.BaseTest;
+import com.ryanh.pages.HomePage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

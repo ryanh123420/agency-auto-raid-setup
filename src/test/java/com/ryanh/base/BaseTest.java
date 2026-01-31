@@ -1,15 +1,11 @@
-package com.demontoast.base;
+package com.ryanh.base;
 
-import com.demontoast.pages.HomePage;
-import com.demontoast.pages.LoginPage;
-import com.demontoast.utils.DriverFactory;
-import org.openqa.selenium.Cookie;
+import com.ryanh.pages.HomePage;
+import com.ryanh.pages.LoginPage;
+import com.ryanh.utils.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
-
-import java.util.Set;
 
 /**
  * Class that contains the setup and teardown methods for the WebDriver that test classes will extend from.

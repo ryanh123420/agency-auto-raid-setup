@@ -1,11 +1,9 @@
-package com.demontoast.utils;
+package com.ryanh.automate;
 
-import com.demontoast.pages.HomePage;
-import com.demontoast.pages.LoginPage;
+import com.ryanh.pages.HomePage;
+import com.ryanh.pages.LoginPage;
+import com.ryanh.utils.DriverFactory;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
 
 
 public class RunWithoutTests {
