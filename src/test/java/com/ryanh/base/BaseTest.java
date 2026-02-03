@@ -32,7 +32,7 @@ public abstract class BaseTest {
     }
 
     /**
-     * Teardown method for when a test finishes and we want to close the WebDriver.
+     * Teardown method for when a test finishes, and we want to close the WebDriver.
      */
     @AfterTest
     public void teardown() {
