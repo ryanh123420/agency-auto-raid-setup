@@ -19,6 +19,8 @@ public abstract class BasePage {
     protected WebDriverWait wait;
     protected Actions actions;
 
+    private final By acceptCookies = By.cssSelector("div.cky-consent-container button.cky-btn-accept");
+
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -80,5 +82,10 @@ public abstract class BasePage {
      */
     protected void type(By element, String text) {
         waitUntilVisible(element).sendKeys(text);
+    }
+
+    protected void acceptCookies() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(acceptCookies));
+        click(acceptCookies);
     }
 }

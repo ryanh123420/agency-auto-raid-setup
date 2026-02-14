@@ -35,9 +35,13 @@ public class BossCard extends BasePage {
     private final By editNoteTextFieldInput = By.cssSelector("div.grid div.flex input");
 
     //Copy note button for created notes
-    private final By copyNoteButton = By.cssSelector("div.grid div.flex button[title*=\"Copy this note\"]");
+    private final By copyNoteButton = By.cssSelector("div.grid div.flex button[title*='Copy this note']");
     //Delete note button for created notes
-    private final By deleteNoteButton = By.cssSelector("div.grid div.flex button[title*=\"Delete your note\"]");
+    private final By deleteNoteButton = By.cssSelector("div.grid div.flex button[title*='Delete note']");
+
+    private final By deleteAlertWindow = By.cssSelector("div[role='alertdialog']");
+
+    private final By deleteAlertButton = By.cssSelector("div[role='alertdialog'] button.bg-destructive");
     //Link for a note in the note table on a boss card
     private final By noteLink = By.cssSelector("div.grid div.flex a[href*=\"/viserio-cooldowns/raid/\"]");
 
@@ -117,11 +121,18 @@ public class BossCard extends BasePage {
     }
 
     public void copyNote() {
-        click(copyNoteButton);
+        wait.until(ExpectedConditions.presenceOfElementLocated(copyNoteButton));
+        wait.until(ExpectedConditions.elementToBeClickable(copyNoteButton));
+        root.findElement(copyNoteButton).click();
     }
 
     public void deleteNote() {
-        click(deleteNoteButton);
+        wait.until(ExpectedConditions.presenceOfElementLocated(deleteNoteButton));
+        wait.until(ExpectedConditions.elementToBeClickable(deleteNoteButton));
+        root.findElement(deleteNoteButton).click();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(deleteAlertWindow));
+        driver.findElement(deleteAlertButton).click();
     }
 
     /**
