@@ -4,13 +4,17 @@ import com.ryanh.base.BaseTest;
 import com.ryanh.components.BossCard;
 import com.ryanh.pages.OverviewPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 /**
  * Test scripts for the webapp raid overview page: hhttps://wowutils.com/viserio-cooldowns/raid/overview
  */
 public class OverviewTests extends BaseTest{
+    OverviewPage overviewPage;
 
     /**
      * Boss names for Manaforge Omega raid
@@ -29,15 +33,19 @@ public class OverviewTests extends BaseTest{
         };
     }
 
+    @BeforeMethod
+    public void overViewSetup() {
+        overviewPage = new OverviewPage(driver);
+        driver.get("https://wowutils.com/viserio-cooldowns/raid/overview");
+        overviewPage.waitForPageLoad();
+    }
+
     /**
      * Adds one note to every boss card on the overview page
      * @param bossName
      */
     @Test(dataProvider = "mfoBossList")
     public void addNotes(String bossName) {
-        OverviewPage overviewPage = new OverviewPage(driver);
-        driver.get("https://wowutils.com/viserio-cooldowns/raid/overview");
-        overviewPage.waitForPageLoad();
         BossCard boss = overviewPage.getBossByName(bossName);
         boss.addNote();
 
@@ -56,14 +64,40 @@ public class OverviewTests extends BaseTest{
      */
     @Test(dataProvider = "mfoBossList", dependsOnMethods = "addNotes")
     public void editNotes(String bossName) {
-        OverviewPage overviewPage = new OverviewPage(driver);
-        driver.get("https://wowutils.com/viserio-cooldowns/raid/overview");
-        overviewPage.waitForPageLoad();
-
         String editedName = "Edited - " + bossName;
         BossCard boss = overviewPage.getBossByName(bossName);
         boss.editNote(editedName);
 
         Assert.assertEquals(boss.getNoteName(), editedName);
+    }
+
+    @Test(dependsOnMethods = "editNotes")
+    public void copyNotes() {
+        List<BossCard> bossList = overviewPage.getBossCards();
+        for(BossCard boss : bossList) {
+            boss.copyNote();
+        }
+    }
+
+    /**
+     * Deletes one note from each BossCard
+     */
+    @Test(dependsOnMethods = "copyNotes")
+    public void deleteNotes() {
+        List<BossCard> bossList = overviewPage.getBossCards();
+        for(BossCard boss : bossList) {
+            boss.deleteNote();
+        }
+    }
+
+    /**
+     * Clears all notes on the Overview page
+     */
+    @Test
+    public void clearAllNotes() {
+        List<BossCard> bossList = overviewPage.getBossCards();
+        for(BossCard boss : bossList) {
+            boss.clearNotes();
+        }
     }
 }
