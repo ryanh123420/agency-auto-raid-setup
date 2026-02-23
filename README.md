@@ -20,7 +20,8 @@ src/
 │   ├── base/
 │   │   └── BasePage.java           # Base class with reusable wait strategies
 │   ├── components/
-│   │   └── BossCard.java           # Reusable component for boss encounter cards
+│   │   ├── BossCard.java           # Reusable component for boss encounter cards
+│   │   └── NoteTile.java           # Component for individual note tiles on a BossCard
 │   ├── pages/
 │   │   ├── HomePage.java           # Main navigation page
 │   │   ├── LoginPage.java          # Authentication page
