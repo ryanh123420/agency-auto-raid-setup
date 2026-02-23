@@ -2,6 +2,7 @@ package com.ryanh.tests;
 
 import com.ryanh.base.BaseTest;
 import com.ryanh.components.BossCard;
+import com.ryanh.components.NoteTile;
 import com.ryanh.pages.OverviewPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -65,7 +66,7 @@ public class OverviewTests extends BaseTest {
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
         Assert.assertTrue(refreshedBoss.isTilePresent());
 
-        refreshedBoss.deleteNote();
+        refreshedBoss.getFirstNoteTile().delete();
     }
 
     /**
@@ -82,11 +83,12 @@ public class OverviewTests extends BaseTest {
         overviewPage.waitForPageLoad();
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
 
-        refreshedBoss.editNote(editedName);
+        NoteTile tile = refreshedBoss.getFirstNoteTile();
+        tile.edit(editedName);
 
-        Assert.assertEquals(refreshedBoss.getNoteName(), editedName);
+        Assert.assertEquals(tile.getName(), editedName);
 
-        refreshedBoss.deleteNote();
+        tile.delete();
     }
 
     /**
@@ -103,7 +105,7 @@ public class OverviewTests extends BaseTest {
         overviewPage.waitForPageLoad();
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
 
-        refreshedBoss.copyNote();
+        refreshedBoss.getFirstNoteTile().copy();
         Assert.assertTrue(refreshedBoss.getNumberOfTiles() > tileAmount);
 
         refreshedBoss.clearNotes();

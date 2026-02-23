@@ -5,6 +5,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * UI component on the Overview page that allows creation of cooldown notes and assignments for a specific boss.
@@ -23,20 +24,8 @@ public class BossCard extends BasePage {
     //Only available when no notes are created
     private final By createANoteButton = By.xpath(".//button[contains(text(), 'Create a note')]");
 
-    /**
-     * Selectors for elements on a boss card that are only available when at least one note is created.
-     */
+    //Locator for individual note tiles on this card
     private final By noteTile = By.cssSelector("div.grid div.box-border:not(.animate-pulse)");
-    private final By editNoteNameButton = By.cssSelector("button[title='Edit note name']");
-    private final By editNoteTextFieldInput = By.cssSelector("div.grid div.flex input");
-    private final By copyNoteButton = By.cssSelector("div.grid div.flex button[title*='Copy this note']");
-    private final By deleteNoteButton = By.cssSelector("div.grid div.flex button[title*='Delete note']");
-    private final By deleteAlertWindow = By.cssSelector("div[role='alertdialog']");
-    private final By deleteAlertButton = By.cssSelector("div[role='alertdialog'] button.bg-destructive");
-    private final By noteLink = By.cssSelector("div.grid div.flex a[href*=\"/viserio-cooldowns/raid/\"]");
-
-    //Notification that appears in top right corner after performing certain actions
-    private final By toastNotification = By.cssSelector("section ol li");
 
     /**
      * When a BossCard is created, we set the root element so we can differentiate between different BossCards on the
@@ -100,77 +89,37 @@ public class BossCard extends BasePage {
     }
 
     /**
-     * Edit a note by clicking the edit button, typing into the input field, then clicking the edit button again to save
-     * @param text - text to replace the current note text with
-     * TODO - Make this faster, have to wait for toastNotification to disappear
+     * Returns all NoteTile components on this card.
+     * @return - List of NoteTile instances scoped to each tile element.
      */
-    public void editNote(String text) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(editNoteNameButton));
-        root.findElement(editNoteNameButton).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(editNoteTextFieldInput));
-        WebElement textField = root.findElement(editNoteTextFieldInput);
-
-        textField.sendKeys(Keys.CONTROL + "a");
-        textField.sendKeys(Keys.DELETE);
-        textField.sendKeys(text);
-        //Clicking again saves the note.
-        root.findElement(editNoteNameButton).click();
-
-        //When an edit occurs, a toast notification pops up, can use these to see if the edit was successful.
-        wait.until(ExpectedConditions.presenceOfElementLocated(toastNotification));
-        //Waiting for the notification to disappear gives enough time for the edit to process.
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(toastNotification));
+    public List<NoteTile> getNoteTiles() {
+        waitUntilVisible(noteTile);
+        return root.findElements(noteTile)
+                .stream()
+                .map(el -> new NoteTile(driver, el))
+                .toList();
     }
 
     /**
-     * Copies the first note on a card.
+     * Returns the first NoteTile on this card.
+     * @return - The first NoteTile.
+     * @throws NoSuchElementException if no tiles exist.
      */
-    public void copyNote() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(copyNoteButton));
-        wait.until(ExpectedConditions.elementToBeClickable(copyNoteButton));
-        root.findElement(copyNoteButton).click();
+    public NoteTile getFirstNoteTile() {
+        List<NoteTile> tiles = getNoteTiles();
+        if (tiles.isEmpty()) {
+            throw new NoSuchElementException("No note tiles found on this boss card.");
+        }
+        return tiles.getFirst();
     }
 
     /**
-     * Deletes one note on a card
-     */
-    public void deleteNote() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(deleteNoteButton));
-        wait.until(ExpectedConditions.elementToBeClickable(deleteNoteButton));
-        root.findElement(deleteNoteButton).click();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(deleteAlertWindow));
-        driver.findElement(deleteAlertButton).click();
-    }
-
-    /**
-     * Gets the name of the note from its link.
-     * @return - Name of the note.
-     */
-    public String getNoteName() {
-        waitUntilExists(noteLink);
-        return root.findElement(noteLink).getText();
-    }
-
-    public void openNote() {
-        click(noteLink);
-    }
-
-    /**
-     * Clears all notes on a card
+     * Clears all notes on a card by deleting each tile.
      * TODO - Make this faster, have to wait for toastNotification to disappear
      */
     public void clearNotes() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(deleteNoteButton));
-        wait.until(ExpectedConditions.elementToBeClickable(deleteNoteButton));
-        List<WebElement> deleteButtons =  root.findElements(deleteNoteButton);
-
-        for(WebElement button : deleteButtons) {
-            button.click();
-            wait.until(ExpectedConditions.presenceOfElementLocated(deleteAlertWindow));
-            driver.findElement(deleteAlertButton).click();
-            wait.until(ExpectedConditions.presenceOfElementLocated(toastNotification));
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(toastNotification));
+        while (!root.findElements(noteTile).isEmpty()) {
+            getFirstNoteTile().delete();
         }
     }
 }
