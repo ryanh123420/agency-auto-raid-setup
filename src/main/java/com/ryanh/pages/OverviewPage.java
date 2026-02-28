@@ -20,14 +20,6 @@ public class OverviewPage extends BasePage {
     }
 
     /**
-     * Calls the wrapped wait method in BasePage to wait for the URL to match the overview page URL
-     */
-    public void waitForPageLoad() {
-        String pageURL = "https://wowutils.com/viserio-cooldowns/raid/overview";
-        waitForPageURL(pageURL);
-    }
-
-    /**
      * Get all BossCard objects on the Overview Page. Find all the root elements for each BossCard, then map those
      * roots to new BossCard objects, then convert to a List of BossCards.
      * @return - List of BossCard objects.

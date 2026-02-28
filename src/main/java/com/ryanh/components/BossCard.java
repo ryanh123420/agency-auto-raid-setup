@@ -2,7 +2,6 @@ package com.ryanh.components;
 
 import com.ryanh.base.BasePage;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,7 +18,8 @@ public class BossCard extends BasePage {
      */
     private final By addNoteButton = By.cssSelector("div.grid div.flex button:not([title]):not(.border)");
     private final By expandViewButton = By.cssSelector("div.grid div.flex button[title=\"Open full view\"]");
-    private final By bossGuideLink = By.cssSelector("div.grid div.flex a[href*=\"/viserio-cooldowns/guides\"] span");
+    private final By bossName = By.cssSelector("div.grid div.flex a[href*=\"/viserio-cooldowns/guides\"] span");
+    private final By bossGuideLink = By.cssSelector("div.grid div.flex a[href*=\"/viserio-cooldowns/guides\"]");
 
     //Only available when no notes are created
     private final By createANoteButton = By.xpath(".//button[contains(text(), 'Create a note')]");
@@ -43,7 +43,7 @@ public class BossCard extends BasePage {
      * @return - Text wrapped around the link href
      */
     public String getBossName() {
-        return root.findElement(bossGuideLink).getText();
+        return root.findElement(bossName).getText();
     }
 
     public WebElement getRootElement() {
@@ -57,18 +57,13 @@ public class BossCard extends BasePage {
     public void addNote() {
         root.findElement(addNoteButton).click();
         waitForStaleElement(root.findElement(addNoteButton));
-    }
-
-    public void createNote() {
-        click(createANoteButton);
-    }
-
-    public void expandView() {
-        click(expandViewButton);
+        driver.navigate().back();
+        waitUntilVisible(addNoteButton);
     }
 
     public void openBossGuide() {
-        click(bossGuideLink);
+        root.findElement(bossGuideLink).click();
+        waitForPageURL(getGuideURL());
     }
 
     /**
@@ -121,5 +116,9 @@ public class BossCard extends BasePage {
         while (!root.findElements(noteTile).isEmpty()) {
             getFirstNoteTile().delete();
         }
+    }
+
+    public String getGuideURL() {
+        return root.findElement(bossGuideLink).getAttribute("href");
     }
 }
