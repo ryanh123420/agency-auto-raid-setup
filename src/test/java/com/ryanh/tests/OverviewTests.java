@@ -102,5 +102,13 @@ public class OverviewTests extends BaseTest {
 
         refreshedBoss.clearNotes();
     }
+
+    @Test(dataProvider = "mfoBossList")
+    public void guideLinkNavigation(String bossName) {
+        BossCard boss = overviewPage.getBossByName(bossName);
+        String guideURL = boss.getGuideURL();
+        boss.openBossGuide();
+        Assert.assertEquals(guideURL, driver.getCurrentUrl());
+    }
 }
 

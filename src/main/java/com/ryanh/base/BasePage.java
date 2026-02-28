@@ -57,7 +57,7 @@ public abstract class BasePage {
      * @param url String URL
      */
     protected void waitForPageURL(String url) {
-        wait.until(ExpectedConditions.urlToBe(url));
+        wait.until(ExpectedConditions.urlContains(url));
     }
 
     /**
