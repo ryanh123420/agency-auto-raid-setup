@@ -58,10 +58,6 @@ public class OverviewTests extends BaseTest {
         BossCard boss = overviewPage.getBossByName(bossName);
         boss.addNote();
 
-        //Adding a note to a BossCard causes forced navigation to the page for that note, we need to navigate back
-        driver.navigate().back();
-        overviewPage.waitForPageLoad();
-
         //Refresh the boss list due to the navigation to avoid stale elements
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
         Assert.assertTrue(refreshedBoss.isTilePresent());
@@ -79,8 +75,6 @@ public class OverviewTests extends BaseTest {
         BossCard boss = overviewPage.getBossByName(bossName);
 
         boss.addNote();
-        driver.navigate().back();
-        overviewPage.waitForPageLoad();
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
 
         NoteTile tile = refreshedBoss.getFirstNoteTile();
@@ -101,8 +95,6 @@ public class OverviewTests extends BaseTest {
         int tileAmount = boss.getNumberOfTiles();
 
         boss.addNote();
-        driver.navigate().back();
-        overviewPage.waitForPageLoad();
         BossCard refreshedBoss = overviewPage.getBossByName(bossName);
 
         refreshedBoss.getFirstNoteTile().copy();
@@ -110,7 +102,5 @@ public class OverviewTests extends BaseTest {
 
         refreshedBoss.clearNotes();
     }
-
-
 }
 

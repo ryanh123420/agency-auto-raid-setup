@@ -57,6 +57,8 @@ public class BossCard extends BasePage {
     public void addNote() {
         root.findElement(addNoteButton).click();
         waitForStaleElement(root.findElement(addNoteButton));
+        driver.navigate().back();
+        waitUntilVisible(addNoteButton);
     }
 
     public void createNote() {
