@@ -111,15 +111,6 @@ public class OverviewTests extends BaseTest {
         refreshedBoss.clearNotes();
     }
 
-    /**
-     * Clears all notes on the Overview page.
-     */
-    @Test(enabled = false)
-    public void clearAllNotes() {
-        List<BossCard> bossList = overviewPage.getBossCards();
-        for (BossCard boss : bossList) {
-            boss.clearNotes();
-        }
-    }
+
 }
 
