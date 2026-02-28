@@ -41,7 +41,6 @@ public class OverviewTests extends BaseTest {
     public void overViewSetup() {
         overviewPage = new OverviewPage(driver);
         driver.get("https://wowutils.com/viserio-cooldowns/raid/overview");
-        overviewPage.waitForPageLoad();
     }
 
     @AfterMethod
